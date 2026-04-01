@@ -33,11 +33,7 @@
           </h1>
           
           <div class="hero-desc">
-            <i18n-t keypath=”hero.desc” tag=”p”>
-              <template #highlight><span class=”highlight-bold”>MiroFish</span></template>
-              <template #agents><span class=”highlight-orange”>{{ $t('hero.descAgents') }}</span></template>
-              <template #optimum><span class=”highlight-code”>{{ $t('hero.descOptimum') }}</span></template>
-            </i18n-t>
+            <p v-html="heroDescHtml"></p>
             <p class="slogan-text">
               {{ $t('hero.slogan') }}<span class="blinking-cursor">_</span>
             </p>
@@ -222,11 +218,22 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+
+
 import HistoryDatabase from '../components/HistoryDatabase.vue'
 import PromptSettings from '../components/PromptSettings.vue'
 
 const router = useRouter()
-const { locale } = useI18n()
+const { locale, t } = useI18n()
+
+const heroDescHtml = computed(() => {
+  const raw = t('hero.desc', {
+    highlight: `<span class="highlight-bold">MiroFish</span>`,
+    agents: `<span class="highlight-orange">${t('hero.descAgents')}</span>`,
+    optimum: `<span class="highlight-code">${t('hero.descOptimum')}</span>`
+  })
+  return raw
+})
 
 const showSettings = ref(false)
 
@@ -328,18 +335,14 @@ const startSimulation = () => {
 </script>
 
 <style scoped>
-/* 全局变量与重置 */
-:root {
+/* Variables defined on the component root so they work with scoped styles */
+.home-container {
   --black: #000000;
   --white: #FFFFFF;
   --orange: #FF4500;
   --gray-light: #F5F5F5;
   --gray-text: #666666;
   --border: #E5E5E5;
-  /* 
-    使用 Space Grotesk 作为主要标题字体，JetBrains Mono 作为代码/标签字体
-    确保已在 index.html 引入这些 Google Fonts 
-  */
   --font-mono: 'JetBrains Mono', monospace;
   --font-sans: 'Space Grotesk', 'Noto Sans SC', system-ui, sans-serif;
   --font-cn: 'Noto Sans SC', system-ui, sans-serif;
