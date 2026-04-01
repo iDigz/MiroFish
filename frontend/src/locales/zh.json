@@ -276,6 +276,20 @@
     "surveyComplete": "调查完成",
     "responsesCollected": "已收集 {count} 份回复"
   },
+  "settings": {
+    "title": "提示词设置",
+    "save": "保存",
+    "reset": "恢复默认",
+    "close": "关闭",
+    "saved": "设置已保存",
+    "resetDone": "已恢复默认",
+    "error": "错误：{error}",
+    "category_ontology": "本体",
+    "category_persona": "Agent人设",
+    "category_sim_config": "模拟配置",
+    "category_report": "Report Agent",
+    "category_interview": "采访"
+  },
   "logs": {
     "enterStep": "进入 Step {step}: {name}",
     "backToStep": "返回 Step {step}: {name}",

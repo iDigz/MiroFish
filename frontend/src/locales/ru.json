@@ -276,6 +276,20 @@
     "surveyComplete": "Опрос завершён",
     "responsesCollected": "Собрано {count} ответов"
   },
+  "settings": {
+    "title": "Настройки промптов",
+    "save": "Сохранить",
+    "reset": "Сброс до дефолтных",
+    "close": "Закрыть",
+    "saved": "Настройки сохранены",
+    "resetDone": "Сброшено до дефолтных",
+    "error": "Ошибка: {error}",
+    "category_ontology": "Онтология",
+    "category_persona": "Персоны агентов",
+    "category_sim_config": "Конфигурация симуляции",
+    "category_report": "Report Agent",
+    "category_interview": "Интервью"
+  },
   "logs": {
     "enterStep": "Переход к шагу {step}: {name}",
     "backToStep": "Возврат к шагу {step}: {name}",

@@ -10,6 +10,7 @@
           {{ $t('lang.' + lang) }}
         </button>
       </div>
+      <button class="settings-btn" @click="showSettings = true" :title="$t('settings.title')">&#9881;</button>
       <div class="nav-links">
         <a href="https://github.com/666ghj/MiroFish" target="_blank" class="github-link">
           {{ $t('nav.github') }} <span class="arrow">↗</span>
@@ -212,6 +213,8 @@
       <!-- 历史项目数据库 -->
       <HistoryDatabase />
     </div>
+
+    <PromptSettings :show="showSettings" @close="showSettings = false" />
   </div>
 </template>
 
@@ -220,9 +223,12 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import HistoryDatabase from '../components/HistoryDatabase.vue'
+import PromptSettings from '../components/PromptSettings.vue'
 
 const router = useRouter()
 const { locale } = useI18n()
+
+const showSettings = ref(false)
 
 const changeLocale = (lang) => {
   locale.value = lang
@@ -390,6 +396,22 @@ const startSimulation = () => {
 .lang-btn:hover {
   color: #fff;
   border-color: rgba(255,255,255,0.6);
+}
+
+.settings-btn {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.6);
+  padding: 4px 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-left: 8px;
+}
+
+.settings-btn:hover {
+  color: #fff;
+  border-color: var(--orange);
 }
 
 .nav-links {

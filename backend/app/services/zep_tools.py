@@ -19,6 +19,7 @@ from ..config import Config
 from ..utils.logger import get_logger
 from ..utils.llm_client import LLMClient
 from ..utils.zep_paging import fetch_all_nodes, fetch_all_edges
+from ..prompts.prompt_loader import get_prompt
 
 logger = get_logger('mirofish.zep_tools')
 
@@ -1577,30 +1578,15 @@ class ZepToolsService:
             }
             agent_summaries.append(summary)
         
-        system_prompt = """你是一个专业的采访策划专家。你的任务是根据采访需求，从模拟Agent列表中选择最适合采访的对象。
+        system_prompt = get_prompt('interview', 'decompose_query')
 
-选择标准：
-1. Agent的身份/职业与采访主题相关
-2. Agent可能持有独特或有价值的观点
-3. 选择多样化的视角（如：支持方、反对方、中立方、专业人士等）
-4. 优先选择与事件直接相关的角色
-
-返回JSON格式：
-{
-    "selected_indices": [选中Agent的索引列表],
-    "reasoning": "选择理由说明"
-}"""
-
-        user_prompt = f"""采访需求：
-{interview_requirement}
-
-模拟背景：
-{simulation_requirement if simulation_requirement else "未提供"}
-
-可选择的Agent列表（共{len(agent_summaries)}个）：
-{json.dumps(agent_summaries, ensure_ascii=False, indent=2)}
-
-请选择最多{max_agents}个最适合采访的Agent，并说明选择理由。"""
+        user_prompt = get_prompt('interview', 'select_agents').format(
+            interview_requirement=interview_requirement,
+            simulation_requirement=simulation_requirement if simulation_requirement else "未提供",
+            agent_count=len(agent_summaries),
+            agent_summaries_json=json.dumps(agent_summaries, ensure_ascii=False, indent=2),
+            max_agents=max_agents
+        )
 
         try:
             response = self.llm.chat_json(
@@ -1641,17 +1627,7 @@ class ZepToolsService:
         
         agent_roles = [a.get("profession", "未知") for a in selected_agents]
         
-        system_prompt = """你是一个专业的记者/采访者。根据采访需求，生成3-5个深度采访问题。
-
-问题要求：
-1. 开放性问题，鼓励详细回答
-2. 针对不同角色可能有不同答案
-3. 涵盖事实、观点、感受等多个维度
-4. 语言自然，像真实采访一样
-5. 每个问题控制在50字以内，简洁明了
-6. 直接提问，不要包含背景说明或前缀
-
-返回JSON格式：{"questions": ["问题1", "问题2", ...]}"""
+        system_prompt = get_prompt('interview', 'generate_questions')
 
         user_prompt = f"""采访需求：{interview_requirement}
 
@@ -1695,21 +1671,7 @@ class ZepToolsService:
         for interview in interviews:
             interview_texts.append(f"【{interview.agent_name}（{interview.agent_role}）】\n{interview.response[:500]}")
         
-        system_prompt = """你是一个专业的新闻编辑。请根据多位受访者的回答，生成一份采访摘要。
-
-摘要要求：
-1. 提炼各方主要观点
-2. 指出观点的共识和分歧
-3. 突出有价值的引言
-4. 客观中立，不偏袒任何一方
-5. 控制在1000字内
-
-格式约束（必须遵守）：
-- 使用纯文本段落，用空行分隔不同部分
-- 不要使用Markdown标题（如#、##、###）
-- 不要使用分割线（如---、***）
-- 引用受访者原话时使用中文引号「」
-- 可以使用**加粗**标记关键词，但不要使用其他Markdown语法"""
+        system_prompt = get_prompt('interview', 'generate_summary')
 
         user_prompt = f"""采访主题：{interview_requirement}
 

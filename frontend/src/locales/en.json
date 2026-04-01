@@ -276,6 +276,20 @@
     "surveyComplete": "Survey Complete",
     "responsesCollected": "{count} responses collected"
   },
+  "settings": {
+    "title": "Prompt Settings",
+    "save": "Save",
+    "reset": "Reset to Defaults",
+    "close": "Close",
+    "saved": "Settings saved",
+    "resetDone": "Reset to defaults",
+    "error": "Error: {error}",
+    "category_ontology": "Ontology",
+    "category_persona": "Agent Personas",
+    "category_sim_config": "Simulation Config",
+    "category_report": "Report Agent",
+    "category_interview": "Interview"
+  },
   "logs": {
     "enterStep": "Entering Step {step}: {name}",
     "backToStep": "Returning to Step {step}: {name}",
